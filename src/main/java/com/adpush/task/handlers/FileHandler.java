@@ -17,7 +17,7 @@ import java.util.List;
 
 public class FileHandler {
     
-    private static final String FILE_BASE_PATH = "../reports/"; //TODO
+    private static final String FILE_BASE_PATH = "../reports/";
     
     public void initializeParentDirectory() throws IOException {
         createParentDirectoryIfNotExists();
@@ -77,17 +77,4 @@ public class FileHandler {
             file.delete();
         }
     }
-    /*
-    public static void main(String[] args) throws IOException {
-        
-        JsonObject put1 = JsonObject.create().put("a", "b");
-        
-        JsonObject put2 = JsonObject.create().put("a", "b");
-        JsonObject put3 = JsonObject.create().put("a", "b");
-        JsonObject put4 = JsonObject.create().put("a", "b");
-        
-        new FileHandler().createMonthlyReport("2013-12", Arrays.asList(put1, put2, put3, put4));
-        
-        //  System.out.println(new File(FILE_BASE_PATH).mkdirs());
-    }*/
 }

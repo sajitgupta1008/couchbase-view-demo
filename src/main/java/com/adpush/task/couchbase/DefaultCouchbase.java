@@ -19,16 +19,8 @@ public class DefaultCouchbase implements Couchbase {
     @Inject
     public DefaultCouchbase(CouchbaseConfig config) {
         this.config = config;
-        System.out.println("\n\nhash code : "+config.hashCode());
-        
-        clusterManager = CouchbaseCluster.create(config.getNodes());
-        bucket = bucket().async();
-    }
-    
-    private Bucket bucket() {
-        clusterManager.authenticate(new PasswordAuthenticator(config.getUserName(), config.getPassword()));
-        return clusterManager.openBucket(config.getBucket());  // TODO
-        //  return clusterManager.openBucket(config.getBucket(), config.getPassword());
+        this.clusterManager = CouchbaseCluster.create(config.getNodes());
+        this.bucket = bucket().async();
     }
     
     @Override
@@ -40,5 +32,10 @@ public class DefaultCouchbase implements Couchbase {
     public void close() {
         bucket.close();
         clusterManager.disconnect();
+    }
+    
+    private Bucket bucket() {
+        clusterManager.authenticate(new PasswordAuthenticator(config.getUserName(), config.getPassword()));
+        return clusterManager.openBucket(config.getBucket());
     }
 }

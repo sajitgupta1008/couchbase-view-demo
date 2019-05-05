@@ -17,8 +17,4 @@ public final class DateUtil {
                 .atZone(ZoneId.systemDefault())
                 .format(FORMATTER);
     }
-    
-    public static void main(String[] args) {
-      //  System.out.println(DateUtil.formatDate(20190101));
-    }
 }

@@ -8,6 +8,7 @@ import com.couchbase.client.java.view.AsyncViewResult;
 import com.couchbase.client.java.view.AsyncViewRow;
 import com.couchbase.client.java.view.DefaultView;
 import com.couchbase.client.java.view.DesignDocument;
+import com.couchbase.client.java.view.Stale;
 import com.couchbase.client.java.view.View;
 import com.couchbase.client.java.view.ViewQuery;
 import rx.Observable;
@@ -28,11 +29,9 @@ public class ViewsHandler {
     public ViewsHandler(Couchbase couchbase, CouchbaseConfig config) {
         this.couchbase = couchbase;
         this.config = config;
-        
-        this.createAllDocumentsView().toBlocking().subscribe();
     }
     
-    private Observable<DesignDocument> createAllDocumentsView() {
+    public Observable<DesignDocument> createAllDocumentsView() {
         
         View view = DefaultView.create(config.getViewName(), MAPPING_FUNCTION);
         DesignDocument designDocument = DesignDocument.create(DESIGN_DOCUMENT_NAME, singletonList(view));
@@ -50,11 +49,17 @@ public class ViewsHandler {
                 });
     }
     
-    public Observable<AsyncViewRow> readView() {
+    public Observable<AsyncViewRow> readAllDocumentsView() {
         
         return couchbase.asyncBucket()
-                .query(ViewQuery.from(DESIGN_DOCUMENT_NAME, config.getViewName()))
+                .query(ViewQuery.from(DESIGN_DOCUMENT_NAME, config.getViewName()).stale(Stale.FALSE))
                 .flatMap(AsyncViewResult::rows)
-                .doOnError(error -> System.out.println("some error occured : " + error));
+                .onErrorReturn(throwable -> {
+                    throw new CouchbaseException(throwable);
+                });
+    }
+    
+    public void closeConnection() {
+        couchbase.close();
     }
 }
