@@ -13,7 +13,7 @@ export COUCHBASE_CONTACT_POINT_ONE=""  //if couchbase runs on localhost, no need
 
 2. Type `mvn clean compile`.
 
-3. Type `mvn exec:java -Dexec.mainClass="com.adpush.task.Application"
+3. Type `mvn exec:java -Dexec.mainClass="com.adpush.task.Application"`
 
 
 The project assumes that there are documents already in couchbase bucket that contain the field `dateCreated` with epoch time in milliseconds. For eg : 
@@ -26,4 +26,3 @@ The project assumes that there are documents already in couchbase bucket that co
 ```
 
 The output tar.gz archive will be created outside the project in a folder named `reports`.
-`
